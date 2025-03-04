@@ -37,11 +37,14 @@ jobs:
           helm repo index . --url https://arconixforge.github.io/helm-charts/
 
       - name: Commit & Push Changes
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.email "arconixforge@gmail.com"
           git config --global user.name "ArconixForge"
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/ArconixForge/helm-charts.git
           git add .
-          git commit -m "Release Helm chart version ${{ env.VERSION }}"
+          git commit -m "Auto-update Helm index.yaml and package charts"
           git push origin main
 
       - name: Create GitHub Release
