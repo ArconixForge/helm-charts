@@ -40,7 +40,14 @@ jobs:
         run: |
           git config --global user.email "arconixforge@gmail.com"
           git config --global user.name "ArconixForge"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/ArconixForge/helm-charts.git
+          
+          # Ensure correct authentication
+          git remote remove origin
+          git remote add origin https://x-access-token:${GH_PAT}@github.com/ArconixForge/helm-charts.git
+          
+          git fetch origin main
+          git checkout main
+          
           git add .
           git commit -m "Auto-update Helm index.yaml and package charts"
           git push origin main
