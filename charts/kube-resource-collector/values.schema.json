@@ -1,0 +1,184 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "kube-resource-collector Values Schema",
+    "description": "Schema for the kube-resource-collector Helm chart values.",
+    "type": "object",
+    "properties": {
+      "replicaCount": {
+        "type": "integer",
+        "default": 1,
+        "description": "Number of replicas for scaling"
+      },
+      "appname": {
+        "type": "string",
+        "default": "kube-resource-collector",
+        "description": "Application name"
+      },
+      "image": {
+        "type": "object",
+        "properties": {
+          "repository": {
+            "type": "string",
+            "description": "Container image repository"
+          },
+          "tag": {
+            "type": "string",
+            "description": "Container image tag"
+          },
+          "pullPolicy": {
+            "type": "string",
+            "enum": ["Always", "IfNotPresent", "Never"],
+            "default": "IfNotPresent",
+            "description": "Image pull policy"
+          }
+        }
+      },
+      "service": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "ClusterIP",
+            "description": "Service type"
+          },
+          "port": {
+            "type": "integer",
+            "default": 5000,
+            "description": "Service port"
+          }
+        }
+      },
+      "database": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "type": "string",
+            "description": "Database host"
+          },
+          "port": {
+            "type": "integer",
+            "default": 5432,
+            "description": "Database port"
+          },
+          "user": {
+            "type": "string",
+            "description": "Database user"
+          },
+          "name": {
+            "type": "string",
+            "description": "Database name"
+          },
+          "password": {
+            "type": "string",
+            "description": "Database password"
+          },
+          "secretName": {
+            "type": "string",
+            "description": "Kubernetes Secret containing database credentials"
+          }
+        }
+      },
+      "namespaces": {
+        "type": "string",
+        "description": "Comma-separated list of namespaces to monitor"
+      },
+      "collection_interval": {
+        "type": "integer",
+        "default": 300,
+        "description": "Interval in seconds between collections"
+      },
+      "rbac": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable/Disable RBAC"
+          },
+          "clusterRole": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable cluster-wide permissions"
+          }
+        }
+      },
+      "serviceAccount": {
+        "type": "object",
+        "properties": {
+          "create": {
+            "type": "boolean",
+            "default": true,
+            "description": "Create a new service account"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the service account"
+          }
+        }
+      },
+      "security": {
+        "type": "object",
+        "properties": {
+          "runAsUser": {
+            "type": "integer",
+            "default": 1000,
+            "description": "User ID for running the container"
+          },
+          "runAsGroup": {
+            "type": "integer",
+            "default": 3000,
+            "description": "Group ID for running the container"
+          },
+          "fsGroup": {
+            "type": "integer",
+            "default": 3000,
+            "description": "Filesystem group ID"
+          }
+        }
+      },
+      "resources": {
+        "type": "object",
+        "properties": {
+          "limits": {
+            "type": "object",
+            "properties": {
+              "cpu": {
+                "type": "string",
+                "description": "CPU limit"
+              },
+              "memory": {
+                "type": "string",
+                "description": "Memory limit"
+              }
+            }
+          },
+          "requests": {
+            "type": "object",
+            "properties": {
+              "cpu": {
+                "type": "string",
+                "description": "CPU request"
+              },
+              "memory": {
+                "type": "string",
+                "description": "Memory request"
+              }
+            }
+          }
+        }
+      },
+      "nodeSelector": {
+        "type": "object",
+        "description": "Node selector labels for pod assignment"
+      },
+      "tolerations": {
+        "type": "array",
+        "description": "Tolerations for scheduling onto nodes with taints"
+      },
+      "affinity": {
+        "type": "object",
+        "description": "Affinity settings for pod scheduling"
+      }
+    }
+  }
+  
