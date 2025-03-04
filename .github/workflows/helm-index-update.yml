@@ -47,30 +47,18 @@ jobs:
           
           git config --global user.email "arconixforge@gmail.com"
           git config --global user.name "ArconixForge"
-          
-          # Check if GH_PAT is set
-          if [[ -z "${GH_PAT}" ]]; then
-            echo "❌ ERROR: GitHub Secret GH_PAT is empty!"
-            exit 1
-          else
-            echo "✅ GH_PAT is set in GitHub Actions"
-          fi
-          
-          # Remove old authentication and set new authentication with PAT
+
+          # Force GitHub to use personal access token (PAT) instead of default GITHUB_TOKEN
           git remote remove origin || true
           git remote add origin https://x-access-token:${GH_PAT}@github.com/ArconixForge/helm-charts.git
-          
-          # Debugging remote URL
-          echo "🔍 Checking remote URL"
-          git remote -v
-          
-          # Fetch latest changes to avoid conflicts
+
+          # Fetch latest changes
           git fetch origin main
           git checkout main
-          
+
           git add .
-          git commit -m "Auto-update Helm index.yaml and package charts"
+          git commit -m "Auto-update Helm index.yaml and package charts" || echo "No changes to commit"
           
-          # Debugging push with verbose output
+          # Force push using PAT
           echo "🚀 Attempting to push changes..."
-          GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push origin main
+          GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push origin main || (echo "❌ Git Push Failed!" && exit 1)
