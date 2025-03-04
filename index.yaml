@@ -1,0 +1,31 @@
+apiVersion: v1
+entries:
+  kube-resource-collector:
+  - annotations:
+      artifacthub.io/changes: |
+        - Initial release
+      artifacthub.io/license: MIT
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: v1.0
+    created: "2025-03-05T00:51:58.5309564+05:30"
+    description: A Helm chart for kube-resource-collector
+    digest: 8f353275dcfd534b33bd2a237139c83cf07858640dbb0d365c37bb9ff98876bf
+    home: https://github.com/ArconixForge/kube-resource-collector
+    keywords:
+    - kubernetes
+    - monitoring
+    - configuration
+    - analysis
+    maintainers:
+    - email: arconixforge@gmail.com
+      name: ArconixForge
+      url: https://github.com/ArconixForge
+    name: kube-resource-collector
+    sources:
+    - https://github.com/ArconixForge/kube-resource-collector
+    type: application
+    urls:
+    - https://arconixforge.github.io/helm-charts/kube-resource-collector-1.0.0.tgz
+    version: 1.0.0
+generated: "2025-03-05T00:51:58.5303534+05:30"
