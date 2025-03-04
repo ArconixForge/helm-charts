@@ -33,6 +33,7 @@ jobs:
       - name: Update Helm Index
         run: |
           helm repo index . --url https://arconixforge.github.io/helm-charts/
+
       - name: Debug GitHub Secret
         run: |
           echo "Checking GitHub Secret..."
@@ -42,16 +43,34 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
+          echo "💡 Debugging GitHub Actions Push Issue"
+          
           git config --global user.email "arconixforge@gmail.com"
           git config --global user.name "ArconixForge"
           
-          # Ensure correct authentication
-          git remote remove origin
+          # Check if GH_PAT is set
+          if [[ -z "${GH_PAT}" ]]; then
+            echo "❌ ERROR: GitHub Secret GH_PAT is empty!"
+            exit 1
+          else
+            echo "✅ GH_PAT is set in GitHub Actions"
+          fi
+          
+          # Remove old authentication and set new authentication with PAT
+          git remote remove origin || true
           git remote add origin https://x-access-token:${GH_PAT}@github.com/ArconixForge/helm-charts.git
           
+          # Debugging remote URL
+          echo "🔍 Checking remote URL"
+          git remote -v
+          
+          # Fetch latest changes to avoid conflicts
           git fetch origin main
           git checkout main
           
           git add .
           git commit -m "Auto-update Helm index.yaml and package charts"
-          git push origin main
+          
+          # Debugging push with verbose output
+          echo "🚀 Attempting to push changes..."
+          GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push origin main
