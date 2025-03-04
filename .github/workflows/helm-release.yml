@@ -38,25 +38,20 @@ jobs:
         run: |
           mkdir -p packaged
           helm package charts/kube-resource-collector -d packaged/
-          echo "Packaged chart: packaged/kube-resource-collector-${{ env.VERSION }}.tgz"
+          echo "Created package: packaged/kube-resource-collector-${{ env.VERSION }}.tgz"
 
       - name: Update Helm Index
         run: |
           helm repo index . --url https://arconixforge.github.io/helm-charts/
-          echo "Updated Helm index.yaml"
+          echo "Updated Helm repository index"
 
       - name: Commit & Push Changes
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
-          # Stage all changes
           git add .
-          
-          # Commit changes (if any)
-          git commit -m "Release: Helm chart kube-resource-collector v${{ env.VERSION }}" || echo "No changes to commit"
-          
-          # Push changes using GITHUB_TOKEN
+          git commit -m "Release: Helm chart v${{ env.VERSION }}" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -68,10 +63,9 @@ jobs:
           name: "Helm Chart v${{ env.VERSION }}"
           body: |
             # Helm Chart Release v${{ env.VERSION }}
-
-            ## What's New
-            - New Helm chart release for kube-resource-collector
-            - Chart version: v${{ env.VERSION }}
+            
+            This release includes:
+            - kube-resource-collector v${{ env.VERSION }}
             
             ## Installation
             ```bash
@@ -79,19 +73,22 @@ jobs:
             helm repo update
             helm install kube-resource-collector arconixforge/kube-resource-collector
             ```
-
-            For more information, see the [documentation](https://github.com/ArconixForge/kube-resource-collector).
           files: packaged/kube-resource-collector-${{ env.VERSION }}.tgz
           draft: false
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Notify ArtifactHub
-        if: ${{ env.ARTIFACTHUB_WEBHOOK_ID != '' }}
         run: |
-          if curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=$ARTIFACTHUB_WEBHOOK_ID" -s -o /dev/null -w "%{http_code}" | grep -q "200"; then
-            echo "Successfully notified ArtifactHub"
+          # Replace with your actual ArtifactHub webhook ID
+          ARTIFACTHUB_WEBHOOK_ID="9b813108-e7fd-47e2-a6d3-e6dd66fd0880"
+          
+          # Only notify if a webhook ID is configured
+          if [ "$ARTIFACTHUB_WEBHOOK_ID" != "9b813108-e7fd-47e2-a6d3-e6dd66fd0880" ]; then
+            echo "Notifying ArtifactHub of new release..."
+            curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=$ARTIFACTHUB_WEBHOOK_ID"
           else
-            echo "Failed to notify ArtifactHub, but continuing workflow"
+            echo "ArtifactHub webhook ID not configured, skipping notification"
+            echo "To enable ArtifactHub notifications, replace '9b813108-e7fd-47e2-a6d3-e6dd66fd0880' with your actual webhook ID"
           fi
-        env:
-          ARTIFACTHUB_WEBHOOK_ID: ${{ secrets.ARTIFACTHUB_WEBHOOK_ID }}
