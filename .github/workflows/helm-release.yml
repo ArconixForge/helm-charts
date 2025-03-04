@@ -8,7 +8,6 @@ on:
       - 'charts/**'  # Runs only if Helm charts change
   workflow_dispatch:  # Allows manual trigger
 
-# Add permissions to allow the workflow to push to the repository and create releases
 permissions:
   contents: write
 
@@ -79,13 +78,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Notify ArtifactHub
-        run: |
-          # Replace with your actual ArtifactHub webhook ID
-          ARTIFACTHUB_WEBHOOK_ID="9b813108-e7fd-47e2-a6d3-e6dd66fd0880"
-          echo "Notifying ArtifactHub of new release..."
-          curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=$ARTIFACTHUB_WEBHOOK_ID" \
-               -H "Content-Type: application/json" \
-               -H "X-CSRF-Token: $GITHUB_SHA" \
-               -d '{"chart_version":"${{ env.VERSION }}"}' || echo "Failed to notify ArtifactHub, but continuing workflow"
-          
