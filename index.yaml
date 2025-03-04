@@ -8,7 +8,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: v1.0
-    created: "2025-03-04T23:29:52.2326382+05:30"
+    created: "2025-03-04T18:00:33.709961705Z"
     description: A Helm chart for kube-resource-collector
     digest: 8dcd04c89b3353d9e443f3c91155458d97fd15ea3e509b4bd3b6833eae10dd22
     home: https://github.com/ArconixForge/kube-resource-collector
@@ -35,9 +35,9 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: v1.0
-    created: "2025-03-04T23:29:52.2352613+05:30"
+    created: "2025-03-04T18:00:33.710422647Z"
     description: A Helm chart for kube-resource-collector
-    digest: 5b77dcde58741f3eb46093de769409f628307dbecf0aa731c0eac3b18f685085
+    digest: 832a57594036e116db4f2d37b6ac68f312e02339264dc81088410cc141bac91d
     home: https://github.com/ArconixForge/kube-resource-collector
     keywords:
     - kubernetes
@@ -55,4 +55,4 @@ entries:
     urls:
     - https://arconixforge.github.io/helm-charts/packaged/kube-resource-collector-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-04T23:29:52.2326382+05:30"
+generated: "2025-03-04T18:00:33.709432956Z"
