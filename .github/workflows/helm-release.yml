@@ -83,12 +83,6 @@ jobs:
         run: |
           # Replace with your actual ArtifactHub webhook ID
           ARTIFACTHUB_WEBHOOK_ID="9b813108-e7fd-47e2-a6d3-e6dd66fd0880"
+          echo "Notifying ArtifactHub of new release..."
+          curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=$ARTIFACTHUB_WEBHOOK_ID"
           
-          # Only notify if a webhook ID is configured
-          if [ "$ARTIFACTHUB_WEBHOOK_ID" != "9b813108-e7fd-47e2-a6d3-e6dd66fd0880" ]; then
-            echo "Notifying ArtifactHub of new release..."
-            curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=$ARTIFACTHUB_WEBHOOK_ID"
-          else
-            echo "ArtifactHub webhook ID not configured, skipping notification"
-            echo "To enable ArtifactHub notifications, replace '9b813108-e7fd-47e2-a6d3-e6dd66fd0880' with your actual webhook ID"
-          fi
