@@ -1,0 +1,43 @@
+name: Update Helm Repository Index
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'charts/**'  # Runs only if Helm charts change
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  update-helm-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.11.1
+
+      - name: Package Helm Charts
+        run: |
+          mkdir -p packaged
+          for chart in charts/*; do
+            if [ -d "$chart" ]; then
+              helm package "$chart" -d packaged/
+            fi
+          done
+
+      - name: Update Helm Index
+        run: |
+          helm repo index . --url https://arconixforge.github.io/helm-charts/
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.email "arconixforge@gmail.com"
+          git config --global user.name "ArconixForge"
+          git add .
+          git commit -m "Auto-update Helm index.yaml and package charts"
+          git push origin main
