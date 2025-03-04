@@ -84,5 +84,8 @@ jobs:
           # Replace with your actual ArtifactHub webhook ID
           ARTIFACTHUB_WEBHOOK_ID="9b813108-e7fd-47e2-a6d3-e6dd66fd0880"
           echo "Notifying ArtifactHub of new release..."
-          curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=$ARTIFACTHUB_WEBHOOK_ID"
+          curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=$ARTIFACTHUB_WEBHOOK_ID" \
+               -H "Content-Type: application/json" \
+               -H "X-CSRF-Token: $GITHUB_SHA" \
+               -d '{"chart_version":"${{ env.VERSION }}"}' || echo "Failed to notify ArtifactHub, but continuing workflow"
           
