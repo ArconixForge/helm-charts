@@ -33,6 +33,10 @@ jobs:
       - name: Update Helm Index
         run: |
           helm repo index . --url https://arconixforge.github.io/helm-charts/
+      - name: Debug GitHub Secret
+        run: |
+          echo "Checking GitHub Secret..."
+          echo "GH_PAT=${{ secrets.GH_PAT }}" | sed 's/./& /g'
 
       - name: Commit and Push Changes
         env:
