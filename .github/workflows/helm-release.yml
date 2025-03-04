@@ -8,6 +8,10 @@ on:
       - 'charts/**'  # Runs only if Helm charts change
   workflow_dispatch:  # Allows manual trigger
 
+# Add permissions to allow the workflow to push to the repository and create releases
+permissions:
+  contents: write
+
 jobs:
   helm-release:
     runs-on: ubuntu-latest
@@ -15,6 +19,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
@@ -26,39 +32,66 @@ jobs:
         run: |
           VERSION=$(grep '^version:' charts/kube-resource-collector/Chart.yaml | awk '{print $2}')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Chart version: $VERSION"
 
       - name: Package Helm Chart
         run: |
           mkdir -p packaged
           helm package charts/kube-resource-collector -d packaged/
+          echo "Packaged chart: packaged/kube-resource-collector-${{ env.VERSION }}.tgz"
 
       - name: Update Helm Index
         run: |
           helm repo index . --url https://arconixforge.github.io/helm-charts/
+          echo "Updated Helm index.yaml"
 
       - name: Commit & Push Changes
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git config --global user.email "arconixforge@gmail.com"
-          git config --global user.name "ArconixForge"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/ArconixForge/helm-charts.git
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # Stage all changes
           git add .
-          git commit -m "Auto-update Helm index.yaml and package charts"
-          git push origin main
+          
+          # Commit changes (if any)
+          git commit -m "Release: Helm chart kube-resource-collector v${{ env.VERSION }}" || echo "No changes to commit"
+          
+          # Push changes using GITHUB_TOKEN
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: "v${{ env.VERSION }}"
           name: "Helm Chart v${{ env.VERSION }}"
-          body: "New Helm chart release for kube-resource-collector v${{ env.VERSION }}"
+          body: |
+            # Helm Chart Release v${{ env.VERSION }}
+
+            ## What's New
+            - New Helm chart release for kube-resource-collector
+            - Chart version: v${{ env.VERSION }}
+            
+            ## Installation
+            ```bash
+            helm repo add arconixforge https://arconixforge.github.io/helm-charts
+            helm repo update
+            helm install kube-resource-collector arconixforge/kube-resource-collector
+            ```
+
+            For more information, see the [documentation](https://github.com/ArconixForge/kube-resource-collector).
           files: packaged/kube-resource-collector-${{ env.VERSION }}.tgz
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Notify ArtifactHub
+        if: ${{ env.ARTIFACTHUB_WEBHOOK_ID != '' }}
         run: |
-          curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=<YOUR_ARTIFACTHUB_WEBHOOK_ID>"
+          if curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=$ARTIFACTHUB_WEBHOOK_ID" -s -o /dev/null -w "%{http_code}" | grep -q "200"; then
+            echo "Successfully notified ArtifactHub"
+          else
+            echo "Failed to notify ArtifactHub, but continuing workflow"
+          fi
+        env:
+          ARTIFACTHUB_WEBHOOK_ID: ${{ secrets.ARTIFACTHUB_WEBHOOK_ID }}
