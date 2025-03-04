@@ -1,0 +1,61 @@
+name: Helm Chart Release Automation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'charts/**'  # Runs only if Helm charts change
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  helm-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.11.1
+
+      - name: Extract Chart Version
+        id: chart_version
+        run: |
+          VERSION=$(grep '^version:' charts/kube-resource-collector/Chart.yaml | awk '{print $2}')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Package Helm Chart
+        run: |
+          mkdir -p packaged
+          helm package charts/kube-resource-collector -d packaged/
+
+      - name: Update Helm Index
+        run: |
+          helm repo index . --url https://arconixforge.github.io/helm-charts/
+
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.email "arconixforge@gmail.com"
+          git config --global user.name "ArconixForge"
+          git add .
+          git commit -m "Release Helm chart version ${{ env.VERSION }}"
+          git push origin main
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v${{ env.VERSION }}"
+          name: "Helm Chart v${{ env.VERSION }}"
+          body: "New Helm chart release for kube-resource-collector v${{ env.VERSION }}"
+          files: packaged/kube-resource-collector-${{ env.VERSION }}.tgz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify ArtifactHub
+        run: |
+          curl -X POST "https://artifacthub.io/api/v1/webhooks/call?webhook_id=<YOUR_ARTIFACTHUB_WEBHOOK_ID>"
