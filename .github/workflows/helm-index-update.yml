@@ -48,9 +48,9 @@ jobs:
           git config --global user.email "arconixforge@gmail.com"
           git config --global user.name "ArconixForge"
 
-          # Force GitHub to use personal access token (PAT) instead of default GITHUB_TOKEN
+          # Ensure authentication uses PAT correctly
           git remote remove origin || true
-          git remote add origin https://x-access-token:${GH_PAT}@github.com/ArconixForge/helm-charts.git
+          git remote add origin https://${GH_PAT}@github.com/ArconixForge/helm-charts.git
 
           # Fetch latest changes
           git fetch origin main
