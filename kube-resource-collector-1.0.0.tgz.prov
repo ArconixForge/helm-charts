@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+annotations:
+  artifacthub.io/changes: |
+    - Initial release
+  artifacthub.io/license: MIT
+  artifacthub.io/prerelease: "false"
+apiVersion: v2
+appVersion: v1.0
+description: A Helm chart for kube-resource-collector
+home: https://github.com/ArconixForge/kube-resource-collector
+keywords:
+- - kubernetes
+- - monitoring
+- - configuration
+- - analysis
+maintainers:
+- - email: arconixforge@gmail.com
+  name: ArconixForge
+  url: https://github.com/ArconixForge
+name: kube-resource-collector
+sources:
+- - https://github.com/ArconixForge/kube-resource-collector
+type: application
+version: 1.0.0
+
+...
+files:
+  kube-resource-collector-1.0.0.tgz: sha256:1fd1185c2688e180a6bf5e53bac52c1ee328a6b3744a9b48e57c5216d0bcd82b
+-----BEGIN PGP SIGNATURE-----
+
+wsFcBAEBCgAQBQJnyB20CRCIYTAqOdx8EgAAOH4QALgezYK8VzD0MEe4aoHkGrA9
+UBEJgqk3C/A1bfXvvZM4wxsJ3LcN8RJeq+xmtapI9zf5ykgjF1crd2ibdIjBQi43
+UKQj7X3Xp9ylhfKOb4C0iykAcMq64ChRPpYB8RvhcDXRE6sibnY8Pl90n3H9kynX
+bO5OxMYH9HcDIhnQ0XzJPmk258epBgfw4NPrTKhAJoAka4XtwmWzpZhCwY+qT/Lb
+mJmMsiKNSH/a7g85EhTZc9acBtVWqprtKSlkDCkvJfL7LX+15TtD5IyvFPXJsOS7
+RAJHYmwbvHa0JGlwOO88hxExmtFJsUsMTeGmkIJfEoBvkTVn2CXaHrBokSXOHaGA
+kUcJsG1yKRPcVw4NsLxQITzsRd9zRe3+w3nbnobdhZ499bpgs0hbWxbJbulKckPN
+osYEYa9v2qSBagWS2t4DYhdN1fUu09jvzsb2jIH7wBjrEeBkEG2/aLhHb7yZjXGJ
+OMZ0vPnJwikIjSajg7hZsEjK4r2mN85lsKxrcTtrWbfU2vIxcIlyotr7pahYgFJu
+PK4+CgtBsfOm7/y7/fCoQo14PE0nf4ehOhd49tlcAUkorBdAFV3cdh34868iIii2
+p1XW5YWF5mjPBMo1N1XxgtV3QTbk4NreypDSz0rxdkyK//ltoIQT9ICkAAE6ufLj
+cLqd5Ug3b9PB17YIzlR0
+=4kwD
+-----END PGP SIGNATURE-----
