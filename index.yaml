@@ -8,7 +8,7 @@ entries:
       artifacthub.io/prerelease: "false"
     apiVersion: v2
     appVersion: v1.0
-    created: "2025-03-05T00:51:58.5309564+05:30"
+    created: "2025-03-04T19:24:52.664429638Z"
     description: A Helm chart for kube-resource-collector
     digest: 8f353275dcfd534b33bd2a237139c83cf07858640dbb0d365c37bb9ff98876bf
     home: https://github.com/ArconixForge/kube-resource-collector
@@ -28,4 +28,31 @@ entries:
     urls:
     - https://arconixforge.github.io/helm-charts/kube-resource-collector-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-05T00:51:58.5303534+05:30"
+  - annotations:
+      artifacthub.io/changes: |
+        - Initial release
+      artifacthub.io/license: MIT
+      artifacthub.io/prerelease: "false"
+    apiVersion: v2
+    appVersion: v1.0
+    created: "2025-03-04T19:24:52.664930785Z"
+    description: A Helm chart for kube-resource-collector
+    digest: c72b41a7da3867a0ee038732c87c32439e72e622f0b17dea7881856fa746d695
+    home: https://github.com/ArconixForge/kube-resource-collector
+    keywords:
+    - kubernetes
+    - monitoring
+    - configuration
+    - analysis
+    maintainers:
+    - email: arconixforge@gmail.com
+      name: ArconixForge
+      url: https://github.com/ArconixForge
+    name: kube-resource-collector
+    sources:
+    - https://github.com/ArconixForge/kube-resource-collector
+    type: application
+    urls:
+    - https://arconixforge.github.io/helm-charts/packaged/kube-resource-collector-1.0.0.tgz
+    version: 1.0.0
+generated: "2025-03-04T19:24:52.663822684Z"
